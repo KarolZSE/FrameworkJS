@@ -242,10 +242,69 @@ function getMonsters() {
 // Inventory Placeholder
 
 const Inv = document.getElementById('Inventory');
+
+let Slots = [];
+let SlotFull = [];
     for (let i = 0; i < 5; i++) {
+        Slots[i] = [];
+        SlotFull[i] = [];
         for (let j = 0; j < 9; j++) {
             const slot = document.createElement('div');
+            Slots[i][j] = slot;
             slot.draggable = 'true';
             Inv.appendChild(slot);
         }
     }
+
+const InfoMenu = document.getElementById('InfoMenu');
+const IMG = document.querySelector('InfoMenu img');
+const Rarity = document.getElementById('Rarity');
+const ItemType = document.getElementById('ItemType');
+
+InfoMenu.addEventListener('click', () => {
+    InfoMenu.style.display = 'none';
+})
+
+function RandomDrop() {
+    let temp1 = Math.random();
+    let x, y;
+    if (temp1 > 0.99) {
+        Rarity.textContent = 'Legendary';
+        y = 3
+    } else if (temp1 > 0.95) {
+        Rarity.textContent = 'Epic';
+        y = 2
+    } else if (temp1 > 0.8) {
+        Rarity.textContent = 'Rare';
+        y = 1
+    }  else if (temp1 > 0.5) {
+        Rarity.textContent = 'Uncommon';
+        y = 4
+    } else {
+        Rarity.textContent = 'Common';
+        y = 0
+    }
+
+    let temp2 = Math.random();
+    if (temp2 > 0.5) {
+        ItemType.textContent = 'Armor';
+        x = 0
+    } else {
+        ItemType.textContent = 'Weapon';
+        x = 0
+    }
+
+    let Placed;
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (!SlotFull[i][j] && !Placed) {
+                Slots[i][j].classList.add('FullSlot');
+                Slots[i][j].style.backgroundPosition = `-${60 * x}px -${60 * y}px`;
+                Placed = true;
+            }
+        }
+    }
+    
+}
+
+RandomDrop();
