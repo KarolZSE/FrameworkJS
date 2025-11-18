@@ -98,20 +98,117 @@ document.addEventListener('keydown', (e) => {
         GridMaking();
     }
 
+    const monsters = getMonsters();
+
+    for (let m of monsters) {
+        const path = astar({ x: m.x, y: m.y }, { x, y });
+
+        if (path && path.length > 0) {
+            const next = path[0];
+
+            Elements[m.y][m.x].removeChild(m.el);
+
+            m.x = next.x;
+            m.y = next.y;
+
+            Elements[m.y][m.x].appendChild(m.el);
+        }
+        
+    }
+
 });
 
 // window.onerror = () => true;
 
-/*
-let cols = 5;
-let rows = 5;
+function astar(start, goal) {
+    let openSet = [];
+    let closedSet = new Set();
+    let cameFrom = {};
 
-let grid = new Array(cols);
+    const gScore = {};
+    const fScore = {};
 
-let openSet = [];
-let closedSet = [];
+    const key = (x, y) => `${x}, ${y}`;
 
-let start;
-let end;
-let path = [];
-*/
+    const heuristic = (x1, y1, x2, y2) => Math.abs(x1 - x2) + Math.abs(y1 - y2);
+
+    let startkey = key(start.x, start.y);
+    gScore[startkey] = 0;
+    fScore[startkey] = heuristic(start.x, start.y, goal.x, goal.y);
+
+    openSet.push({ x: start.x, y: start.y, f: fScore[startkey]});
+
+    const directions = [
+        { x: 1, y: 0 },
+        { x: -1, y: 0 },
+        { x: 0, y: 1 },
+        { x: 0, y: -1 }
+    ];
+
+    while (openSet.length > 0) {
+        openSet.sort((a, b) => a.f - b.f);
+        const current = openSet.shift();
+        const curKey = key(current.x, current.y);
+
+        if (current.x === goal.x && current.y === goal.y) {
+            const path = [];
+            let k = curKey;
+            while (k in cameFrom) {
+                const [px, py] = cameFrom[k].split(',').map(Number);
+                const [cx, cy] = k.split(',').map(Number);
+                path.unshift({ x: cx, y: cy });
+                k = key(px, py);
+            }
+
+            return path;
+        }
+
+        closedSet.add(curKey);
+
+        for (const d of directions) {
+            const nx = current.x + d.x;
+            const ny = current.y + d.y;
+
+            if (
+                nx < 0 || nx >= 15 ||
+                ny < 0 || ny >= 15 ||
+                Stones[ny][nx] === 1
+            ) continue;
+
+            const neighKey = key(nx, ny);
+
+            if (closedSet.has(neighKey)) continue;
+
+            const tentativeG = gScore[curKey] + 1;
+
+            if (!(neighKey in gScore) || tentativeG < gScore[neighKey]) {
+                cameFrom[neighKey] = curKey;
+                gScore[neighKey] = tentativeG;
+                fScore[neighKey] = tentativeG + heuristic(nx, ny, goal.x, goal.y);
+
+                if (!openSet.some(n => n.x === nx && n.y === ny)) {
+                    openSet.push({ x: nx, y: ny, f: fScore[neighKey] });
+                }
+            }
+        }
+    }
+
+    return null;
+}
+
+function getMonsters() {
+    let monsters = [];
+    for (let i = 0; i < 15; i++) {
+        for (let j = 0; j < 15; j++) {
+            if (Elements[i][j].firstChild && Elements[i][j].firstChild.classList.contains('monster')) {
+                monsters.push({
+                    el: Elements[i][j].firstChild,
+                    x: j,
+                    y: i
+                });
+            }
+        }
+    }
+
+    return monsters;
+}
