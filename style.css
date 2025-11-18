@@ -2,11 +2,18 @@
     display: grid;
     width: 600px;
     height: 600px;
-    grid-template-columns: repeat(15, auto);
-    grid-template-rows: repeat(15, auto);
+    grid-template-columns: repeat(15, 40px);
+    grid-template-rows: repeat(15, 40px);
 }
 
 .wall {
     background: #000;
     color: aqua;
+}
+
+#Player {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: red;
 }
