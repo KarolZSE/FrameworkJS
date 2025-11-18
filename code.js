@@ -33,7 +33,8 @@ function GridMaking() {
 
                 let destruction_level = 0;
                 block.addEventListener('click', () => {
-                   if (++destruction_level >= 4) {
+                    moveEnemy();
+                    if (++destruction_level >= 4) {
                         Stones[i][j] = 0;
                         block.classList.remove('wall');
                         block.textContent = '';
@@ -98,6 +99,10 @@ document.addEventListener('keydown', (e) => {
         GridMaking();
     }
 
+    moveEnemy();
+});
+
+function moveEnemy() {
     const monsters = getMonsters();
 
     for (let m of monsters) {
@@ -114,12 +119,13 @@ document.addEventListener('keydown', (e) => {
             Elements[m.y][m.x].appendChild(m.el);
         }
         
+        if (m.x === x && m.y === y) {
+            Elements[m.y][m.x].removeChild(m.el);
+            console.log('Enemy Touched the player');
+            continue;
+        }
     }
-
-});
-
-// window.onerror = () => true;
-
+}
 function astar(start, goal) {
     let openSet = [];
     let closedSet = new Set();
@@ -200,9 +206,12 @@ function getMonsters() {
     let monsters = [];
     for (let i = 0; i < 15; i++) {
         for (let j = 0; j < 15; j++) {
-            if (Elements[i][j].firstChild && Elements[i][j].firstChild.classList.contains('monster')) {
+            const cell = Elements[i][j];
+            if (!cell) continue;
+            const child = cell.firstChild;
+            if (child && child.classList && child.classList.contains('monster')) {
                 monsters.push({
-                    el: Elements[i][j].firstChild,
+                    el: child,
                     x: j,
                     y: i
                 });
