@@ -3,18 +3,14 @@ let Stones = [];
 let Elements = [];
 
 let x = 0, y = 0;
-let Player;
+const Player = document.getElementById('Player');
 
 function GridMaking() {
     Stones = [];
     Elements = [];
 
     GameDir.innerHTML = '';
-
     x = 0, y = 0;
-    Player = document.createElement('div');
-    Player.id = 'Player';
-    GameDir.appendChild(Player);
 
     for (let i = 0; i < 15; i++) {
         Stones[i] = [];
@@ -23,6 +19,7 @@ function GridMaking() {
             const block = document.createElement('div');
 
             Elements[i][j] = block;
+            // block.textContent = j;
 
             if (Stones[i][Math.max(0, j - 1)] && Math.random() > 0.2) {
                 WallMaking();
@@ -52,9 +49,21 @@ function GridMaking() {
                 Stones[i][j] = 2;
             }
 
+            if (j == 0 && i == 0) {
+                const Rect = GameDir.getBoundingClientRect();
+                Player.style.left = Rect.left + 1 + 'px';
+                Player.style.top = Rect.top + 1 + 'px';
+            }
+
             GameDir.appendChild(block);
+
+            if (!Stones[i][j] && Math.random() > 0.9) {
+                const Monster = document.createElement('div');
+                Monster.classList.add('monster');
+                block.appendChild(Monster);
+            }
         }
-    }
+    } 
 };
 
 GridMaking();

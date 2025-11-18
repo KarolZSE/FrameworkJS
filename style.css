@@ -11,18 +11,26 @@
     grid-template-rows: repeat(15, 40px);
 }
 
+#GameDir div {
+    position: relative;
+}
+
 .wall {
     background: #000;
     color: aqua;
 }
 
-#Player {
+#Player, .monster {
     position: absolute;
     top: 0px;
     left: 0px;
     width: 40px;
     height: 40px;
     background: red;
+}
+
+.monster {
+    background: greenyellow;
 }
 
 .door {
