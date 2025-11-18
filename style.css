@@ -1,7 +1,12 @@
 #GameDir {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: grid;
     width: 600px;
     height: 600px;
+    border: 1px solid black;
     grid-template-columns: repeat(15, 40px);
     grid-template-rows: repeat(15, 40px);
 }
@@ -13,6 +18,8 @@
 
 #Player {
     position: absolute;
+    top: 0px;
+    left: 0px;
     width: 40px;
     height: 40px;
     background: red;
