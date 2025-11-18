@@ -7,8 +7,23 @@
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-    <div id="GameDir"></div>
-    <div id="Player"></div>
+<div id="Player"></div>
+<table style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);">
+    <tr>
+        <td><div id="GameDir"></div></td>
+        <td>
+            <div style="
+            height: 60px; 
+            font-size: 60px;
+            text-align: center;">Inventory</div>
+            <div id="Inventory"></div>
+        </td>
+    </tr>
+</table>
 </body>
 <script src="code.js"></script>
 </html>

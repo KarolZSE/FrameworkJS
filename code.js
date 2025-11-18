@@ -50,6 +50,7 @@ function GridMaking() {
                 Stones[i][j] = 2;
             }
 
+            // Player spawn
             if (j == 0 && i == 0) {
                 const Rect = GameDir.getBoundingClientRect();
                 Player.style.left = Rect.left + 1 + 'px';
@@ -58,10 +59,22 @@ function GridMaking() {
 
             GameDir.appendChild(block);
 
+            // Monster Spawn
             if (!Stones[i][j] && Math.random() > 0.9) {
                 const Monster = document.createElement('div');
                 Monster.classList.add('monster');
                 block.appendChild(Monster);
+            }
+
+            // Chests Spawn
+            if (!Stones[i][j] && Math.random() > 0.99) {
+                const Chest = document.createElement('div');
+                block.addEventListener('click', () => {});
+                Chest.classList.add('chest');
+                block.classList.remove('wall');
+                Stones[i][j] = 3;
+                block.appendChild(Chest);
+
             }
         }
     } 
@@ -97,6 +110,10 @@ document.addEventListener('keydown', (e) => {
     if (Stones[y][x] == 2) {
         console.log('test');
         GridMaking();
+    }
+
+    if (Stones[y][x] == 3) {
+
     }
 
     moveEnemy();
@@ -221,3 +238,14 @@ function getMonsters() {
 
     return monsters;
 }
+
+// Inventory Placeholder
+
+const Inv = document.getElementById('Inventory');
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 9; j++) {
+            const slot = document.createElement('div');
+            slot.draggable = 'true';
+            Inv.appendChild(slot);
+        }
+    }

@@ -1,8 +1,4 @@
 #GameDir {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: grid;
     width: 600px;
     height: 600px;
@@ -15,18 +11,36 @@
     position: relative;
 }
 
+#Inventory {
+    width: 300px;
+    height: 540px;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(9, 60px);
+    text-align: center;
+}
+
+#Inventory div {
+    border: 0.5px solid black;
+}
+
 .wall {
     background: #000;
     color: aqua;
 }
 
-#Player, .monster {
+#Player, .monster, .chest {
     position: absolute;
     top: 0px;
     left: 0px;
     width: 40px;
     height: 40px;
     background: red;
+}
+
+.chest {
+    background: aqua;
 }
 
 .monster {
