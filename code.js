@@ -270,7 +270,7 @@ function RandomDrop() {
     let Placed, Type;
     for (let i = 0; i < 5; i++) {
         for (let j = 0; j < 9; j++) {
-            if (!SlotFull[i][j] && !Placed) {
+            if (!Slots[i][j].dataset.type && !Placed) {
     let temp1 = Math.random();
     let x, y, r;
     if (temp1 > 0.99) {
@@ -322,8 +322,9 @@ function RandomDrop() {
         x = 0
     }
 
-
+                console.log(Slots[i][j]);
                 Slots[i][j].classList.add('FullSlot');
+                document.getElementById('Preview').style.backgroundPosition = `-${300 * x}px -${300 * y}px`;
                 Slots[i][j].style.backgroundPosition = `-${60 * x}px -${60 * y}px`;
                 Placed = true;
 
@@ -341,3 +342,6 @@ function RandomDrop() {
 }
 
 RandomDrop();
+setTimeout(() => {
+    RandomDrop();  
+}, 100);
