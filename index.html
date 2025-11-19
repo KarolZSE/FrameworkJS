@@ -14,6 +14,23 @@
     left: 50%;
     transform: translate(-50%, -50%);">
     <tr>
+        <td style="border: 1px solid black; text-align: center;">
+            <h1>Items equipped:</h1>
+            <div id="Equiped">
+                <div class="items" id="Helmet"></div>
+                <div style="display: flex; gap: 5px;">
+                    <div class="items" id="Shield"></div>
+                    <div class="items" id="Chestplate"></div>
+                    <div class="items" id="Sword"></div>
+                </div>
+                <div class="items" id="Boots"></div>
+            </div>
+            <h2>Boosts:</h2>
+            <ul style="list-style-type: none; text-align: left;">
+                <li>Your armor gives you +<span id="ArmorProc">100</span>% to defense</li>
+                <li>Your weapon gives you +<span id="weaponProc">100</span>% to attack</li>
+            </ul>
+        </td>
         <td><div id="GameDir"></div></td>
         <td>
             <div style="

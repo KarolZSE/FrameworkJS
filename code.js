@@ -260,51 +260,84 @@ const InfoMenu = document.getElementById('InfoMenu');
 const IMG = document.querySelector('InfoMenu img');
 const Rarity = document.getElementById('Rarity');
 const ItemType = document.getElementById('ItemType');
+let global = {};
 
 InfoMenu.addEventListener('click', () => {
     InfoMenu.style.display = 'none';
 })
 
 function RandomDrop() {
+    let Placed, Type;
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (!SlotFull[i][j] && !Placed) {
     let temp1 = Math.random();
-    let x, y;
+    let x, y, r;
     if (temp1 > 0.99) {
         Rarity.textContent = 'Legendary';
         y = 3
+        r = 5
     } else if (temp1 > 0.95) {
         Rarity.textContent = 'Epic';
         y = 2
+        r = 4
     } else if (temp1 > 0.8) {
         Rarity.textContent = 'Rare';
         y = 1
+        r = 3
     }  else if (temp1 > 0.5) {
         Rarity.textContent = 'Uncommon';
         y = 4
+        r = 2
     } else {
         Rarity.textContent = 'Common';
         y = 0
+        r = 1
     }
 
-    let temp2 = Math.random();
-    if (temp2 > 0.5) {
-        ItemType.textContent = 'Armor';
-        x = 0
+    if (Math.random() > 0.5) {
+        Type = 'Armor';
+        let temp2 = Math.random();
+        if (temp2 > 0.75) {
+            Slots[i][j].dataset.type = "Chestplate";
+            ItemType.textContent = 'Chestplate';
+            x = 0;
+        } else if (temp2 > 0.5) {
+            Slots[i][j].dataset.type = "Helmet";
+            ItemType.textContent = 'Helmet';
+            x = 1;
+        } else if (temp2 > 0.25) {
+            Slots[i][j].dataset.type = "Shield";
+            ItemType.textContent = 'Shield';
+            x = 2;
+        } else {
+            Slots[i][j].dataset.type = "Boots";
+            ItemType.textContent = 'Boots';
+            x = 3;
+        }
     } else {
+
+        Type = 'Weapon';
         ItemType.textContent = 'Weapon';
         x = 0
     }
 
-    let Placed;
-    for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 9; j++) {
-            if (!SlotFull[i][j] && !Placed) {
+
                 Slots[i][j].classList.add('FullSlot');
                 Slots[i][j].style.backgroundPosition = `-${60 * x}px -${60 * y}px`;
                 Placed = true;
+
+                Slots[i][j].addEventListener("click", () => {
+                    document.getElementById(Slots[i][j].dataset.type).style.backgroundPosition = `-${80 * x}px -${80 * y}px`;
+                    
+                    if (!global[Type]) global[Type] = 0;
+                    
+                    global[Type] += r * 100 / 4;
+                    document.getElementById(`${Type}Proc`).textContent = global[Type];
+                });
             }
         }
     }
-    
 }
 
 RandomDrop();
