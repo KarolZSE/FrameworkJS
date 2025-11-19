@@ -99,12 +99,14 @@ document.addEventListener('keydown', (e) => {
         if (x - 1 < 0 || Stones[y][x - 1] == 1) return;
         x--;
         Player.style.left = Number(Player.offsetLeft) - 40 + 'px';
+        Player.style.transform = 'scaleX(1)';
     };
 
     if (e.key.toLowerCase() == 'd') {
         if (x + 1 >= 15 || Stones[y][x + 1] == 1) return;
         x++;
         Player.style.left = Number(Player.offsetLeft) + 40 + 'px';
+        Player.style.transform = 'scaleX(-1)';
     };
 
     if (Stones[y][x] == 2) {
