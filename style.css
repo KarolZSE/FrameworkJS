@@ -41,9 +41,11 @@ body {
     background: sandybrown;
     text-align: center;
 }
+
 .wall {
     background: #000;
     color: aqua;
+    z-index: -1;
 }
 
 #Player, .monster, .chest {
@@ -53,7 +55,6 @@ body {
     width: 40px;
     height: 40px;
     background: red;
-    z-index: 1;
 }
 
 #Preview {
@@ -104,5 +105,41 @@ li {
     background-size: 400px 400px;
     background-position: -400px -400px;
     image-rendering: pixelated;
+    border: 1px solid black;
+}
+
+#FightScreen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border: 1px solid black;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+}
+
+#FightScreen > div {
+    width: 300px;
+    height: 150px;
+    border: 1px solid black;
+}
+
+#FightScreen > div > div {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 30px;
+    margin-top: 12px;
+}
+#EnemyHealthBar, #PlayerHealthBar {
+    width: 280px;
+    height: 75px !important;
+    margin-left: auto;
+    margin-right: auto;
     border: 1px solid black;
 }

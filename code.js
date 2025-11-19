@@ -114,6 +114,8 @@ document.addEventListener('keydown', (e) => {
 
     if (Stones[y][x] == 3) {
         InfoMenu.style.display = 'inline';
+        Elements[y][x].innerHTML = '';
+        Stones[y][x] = 0;
         RandomDrop();
     }
 
@@ -297,7 +299,7 @@ function RandomDrop() {
         r = 1
     }
 
-    if (Math.random() > 0) {
+    if (Math.random() > 0.5) {
         Type = 'Armor';
         let temp2 = Math.random();
         if (temp2 > 0.75) {
@@ -318,10 +320,10 @@ function RandomDrop() {
             x = 3;
         }
     } else {
-
         Type = 'Weapon';
-        ItemType.textContent = 'Weapon';
-        x = 0
+        Slots[i][j].dataset.type = 'Sword';
+        ItemType.textContent = 'Sword';
+        x = 4;
     }
 
                 Slots[i][j].classList.add('FullSlot');

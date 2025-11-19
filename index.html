@@ -28,7 +28,7 @@
             <h2>Boosts:</h2>
             <ul style="list-style-type: none; text-align: left;">
                 <li>Your armor gives you +<span id="ArmorProc">0</span>% to defense</li>
-                <li>Your weapon gives you +<span id="weaponProc">0</span>% to attack</li>
+                <li>Your weapon gives you +<span id="WeaponProc">0</span>% to attack</li>
             </ul>
         </td>
         <td><div id="GameDir"></div></td>
@@ -46,7 +46,29 @@
     <h2>a <span id="Rarity"></span> <span id="ItemType"></span></h2>
     <div id="Preview"></div>
     <h1>Click anywhere to continue...</h1>
-
+</div>
+<div id="FightScreen">
+    <div style="
+    position: relative; 
+    align-self: flex-end; 
+    top: 10px; 
+    right: 10px;">
+        <div>
+            <h1>?</h1> 
+            <h1>LVL <span id="EnemyLevel">10</span></h1>
+        </div>
+        <div id="EnemyHealthBar"></div>
+    </div>
+    <div style="
+    position: relative; 
+    left: 10px; 
+    bottom: 10px;">
+        <div>
+            <h1>Player</h1> 
+            <h1>LVL <span id="PlayerLevel">10</span></h1>
+        </div>
+        <div id="PlayerHealthBar"></div>
+    </div>
 </div>
 </body>
 <script src="code.js"></script>
