@@ -113,7 +113,8 @@ document.addEventListener('keydown', (e) => {
     }
 
     if (Stones[y][x] == 3) {
-
+        InfoMenu.style.display = 'inline';
+        RandomDrop();
     }
 
     moveEnemy();
@@ -261,6 +262,7 @@ const IMG = document.querySelector('InfoMenu img');
 const Rarity = document.getElementById('Rarity');
 const ItemType = document.getElementById('ItemType');
 let global = {};
+let equipped = {};
 
 InfoMenu.addEventListener('click', () => {
     InfoMenu.style.display = 'none';
@@ -295,7 +297,7 @@ function RandomDrop() {
         r = 1
     }
 
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0) {
         Type = 'Armor';
         let temp2 = Math.random();
         if (temp2 > 0.75) {
@@ -322,26 +324,34 @@ function RandomDrop() {
         x = 0
     }
 
-                console.log(Slots[i][j]);
                 Slots[i][j].classList.add('FullSlot');
                 document.getElementById('Preview').style.backgroundPosition = `-${300 * x}px -${300 * y}px`;
                 Slots[i][j].style.backgroundPosition = `-${60 * x}px -${60 * y}px`;
                 Placed = true;
 
                 Slots[i][j].addEventListener("click", () => {
-                    document.getElementById(Slots[i][j].dataset.type).style.backgroundPosition = `-${80 * x}px -${80 * y}px`;
-                    
+                    moveEnemy();
+                    let temp = document.getElementById(Slots[i][j].dataset.type).style;
+
                     if (!global[Type]) global[Type] = 0;
+
+                    if (equipped[Slots[i][j].dataset.type]) {
+                        const current = equipped[Slots[i][j].dataset.type];
+
+                        if (current.y === y) return;
+    
+                        global[Type] -= current.r * 100 / 4;
+                    };
+
+                    // if (temp.backgroundPositionY / 80 == y) return; 
+                    temp.backgroundPosition = `-${80 * x}px -${80 * y}px`;
                     
                     global[Type] += r * 100 / 4;
                     document.getElementById(`${Type}Proc`).textContent = global[Type];
+
+                    equipped[Slots[i][j].dataset.type] = { x, y, r};
                 });
             }
         }
     }
 }
-
-RandomDrop();
-setTimeout(() => {
-    RandomDrop();  
-}, 100);
