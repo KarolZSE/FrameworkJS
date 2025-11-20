@@ -80,6 +80,16 @@ body {
     image-rendering: pixelated;
 }
 
+#SlashAnimation {
+    position: absolute;
+    width: 250px;
+    background: url('Slash.png');
+    background-repeat: no-repeat !important;
+    background-size: 2250px 250px !important;
+    background-position: 0 0;
+    filter: hue-rotate(270deg);
+}
+
 #Preview {
     width: 300px;
     height: 300px;
@@ -167,6 +177,7 @@ li {
     margin-left: auto;
     margin-right: auto;
     border: 1px solid black;
+    background: green;
 }
 
 .button {

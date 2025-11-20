@@ -144,7 +144,7 @@ function moveEnemy() {
         if (m.x === x && m.y === y) {
             Elements[m.y][m.x].removeChild(m.el);
             console.log('Enemy Touched the player');
-            continue;
+            break;
         }
     }
 }
@@ -266,6 +266,8 @@ const IMG = document.querySelector('InfoMenu img');
 const Rarity = document.getElementById('Rarity');
 const ItemType = document.getElementById('ItemType');
 let global = {};
+global['Weapon'] = 0;
+global['Armor'] = 0;
 let equipped = {};
 
 InfoMenu.addEventListener('click', () => {
@@ -359,3 +361,29 @@ function RandomDrop() {
         }
     }
 }
+
+// Button functionality
+const PlayerLevel = document.getElementById('PlayerLevel');
+const EnemyHealth = document.getElementById('EnemyHealth');
+const EnemyHealthBar = document.getElementById('EnemyHealthBar');
+const SlashAnimation = document.getElementById('SlashAnimation');
+const buttons = document.querySelectorAll('.button');
+buttons.forEach(e => {
+    e.addEventListener('click', () => {
+        if (e.textContent === 'Attack') {
+            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2).toFixed(2);
+            
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    console.log('bruh');
+                    SlashAnimation.style.backgroundPosition = `-${i * 250}px 0`;
+                }, 100 * i); 
+            }   
+
+            EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - Number(EnemyHealth.textContent)}%, green 1%, green)`;
+            if (Number(EnemyHealth.textContent) <= 0) {
+                console.log('Enemy Lost')
+            }
+        } 
+    });
+});
