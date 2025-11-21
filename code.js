@@ -80,9 +80,13 @@ function GridMaking() {
     } 
 };
 
+let InFight = true;
+const PotionCount = document.getElementById('PotionCount');
+
 GridMaking();
 // console.log(Elements);
 document.addEventListener('keydown', (e) => {
+    if (InFight) return;
     if (e.key.toLowerCase() == 'w') {
         if (y - 1 < 0 || Stones[y - 1][x] == 1) return;
         y--;
@@ -111,6 +115,7 @@ document.addEventListener('keydown', (e) => {
 
     if (Stones[y][x] == 2) {
         console.log('test');
+        PotionCount.textContent = Number(PotionCount.textContent) + 1;
         GridMaking();
     }
 
@@ -367,7 +372,11 @@ const PlayerLevel = document.getElementById('PlayerLevel');
 const EnemyHealth = document.getElementById('EnemyHealth');
 const EnemyHealthBar = document.getElementById('EnemyHealthBar');
 const SlashAnimation = document.getElementById('SlashAnimation');
+const PlayerHealth = document.getElementById('PlayerHealth');
+
 const buttons = document.querySelectorAll('.button');
+let HeavyAttack = false;
+
 buttons.forEach(e => {
     e.addEventListener('click', () => {
         if (e.textContent === 'Attack') {
@@ -378,12 +387,42 @@ buttons.forEach(e => {
                     console.log('bruh');
                     SlashAnimation.style.backgroundPosition = `-${i * 250}px 0`;
                 }, 100 * i); 
-            }   
-
-            EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - Number(EnemyHealth.textContent)}%, green 1%, green)`;
-            if (Number(EnemyHealth.textContent) <= 0) {
-                console.log('Enemy Lost')
             }
-        } 
+            setTimeout(() => {
+                SlashAnimation.style.backgroundPosition = `-2500px 0`;                
+            }, 500);
+        }
+
+        if (e.textContent === 'Heavy Attack' && HeavyAttack) {
+            HeavyAttack = false;
+            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2 * 3).toFixed(2);
+            
+            for (let i = 5; i < 9; i++) {
+                setTimeout(() => {
+                    SlashAnimation.style.backgroundPosition = `-${i * 250}px 0`;
+                }, 100 * (i - 5)); 
+            }
+            setTimeout(() => {
+                SlashAnimation.style.backgroundPosition = `-2500px 0`;                
+            }, 500);
+        } else if (e.textContent === 'Heavy Attack') {
+            console.log('heavy attack on!');
+            HeavyAttack = true;
+        }
+
+        if (e.textContent === 'Heal') {
+            PotionCount.textContent = Number(PotionCount.textContent) - 1;
+            console.log(Number(PlayerHealth.textContent), Math.random() * 50)
+            PlayerHealth.textContent = Math.min(100, Number(PlayerHealth.textContent) + Math.random() * 50);
+        };
+
+        EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - Number(EnemyHealth.textContent)}%, green 1%, green)`;
+        if (Number(EnemyHealth.textContent) <= 0) {
+            FightScreen.style.display = 'none';
+            InFight = false;
+            console.log('Enemy Lost')
+        }
     });
 });
+
+function EnemyAttack() {}
