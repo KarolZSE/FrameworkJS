@@ -425,6 +425,13 @@ buttons.forEach(e => {
     });
 });
 
+fetch('frameworks_examples.json')
+    .then(res => res.json())
+    .then(snippets => {
+        window.snippets = snippets;
+        console.log(snippets);
+    });
+    
 function EnemyAttack() {
     
 }

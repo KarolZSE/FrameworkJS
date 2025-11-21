@@ -231,4 +231,5 @@ li {
     transform: translate(0, -50%);
     background: #fff;
     z-index: 2;
+    text-align: center;
 }

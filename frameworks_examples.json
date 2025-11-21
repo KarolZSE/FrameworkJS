@@ -1,0 +1,58 @@
+[
+  {
+    "id": "Express.js",
+    "code": "const express = require(\"express\");\nconst app = express();\napp.get(\"/\", (req, res) => res.send(\"Express here!\"));\napp.listen(3000);"
+  },
+  {
+    "id": "Laravel",
+    "code": "<?php\nuse Illuminate\\Support\\Facades\\Route;\nRoute::get('/', function () {\n    return 'Hello from Laravel!';\n});"
+  },
+  {
+    "id": "Flask",
+    "code": "from flask import Flask\napp = Flask(__name__)\n@app.route('/')\ndef home():\n    return 'Hello from Flask!'"
+  },
+  {
+    "id": "ASP.NET Core",
+    "code": "var builder = WebApplication.CreateBuilder(args);\nvar app = builder.Build();\napp.MapGet('/', () => 'Hello from ASP.NET!');\napp.Run();"
+  },
+  {
+    "id": "Ruby on Rails",
+    "code": "class HomeController < ApplicationController\ndef index\n    render plain: 'Hello from Rails!'\n    end\nend"
+  },
+  {
+    "id": "Spring Boot",
+    "code": "@RestController\n@SpringBootApplication\npublic class DemoApp {\n    @GetMapping('/')\n    public String home() {\n        return 'Hello from Spring Boot!';\n    }\n}"
+  },
+  {
+    "id": "Angular",
+    "code": "@Component({\n    selector: 'app-root',\n    template: '<h1>Hello Angular!</h1>'\n})\nexport class AppComponent {}"
+  },
+  {
+    "id": "Vue 3",
+    "code": "<template>\n    <h1>{{ msg }}</h1>\n</template>\n\n<script setup>\nconst msg = 'Hello from Vue!'\n</script>"
+  },
+  {
+    "id": "Next.js",
+    "code": "export default function Page() {\n    return <h1>Hello from Next.js</h1>;\n}"
+  },
+  {
+    "id": "FastAPI",
+    "code": "from fastapi import FastAPI\napp = FastAPI()\n@app.get('/')\nasync def home():\n    return {'message': 'Hello from FastAPI!'}"
+  },
+  {
+    "id": "React",
+    "code": "import { useState } from 'react';\nexport default function App() {\n    const [n, setN] = useState(0);\n    return <button onClick={() => setN(n + 1)}>{n}</button>;\n}"
+  },
+  {
+    "id": "Phoenix",
+    "code": "defmodule MyAppWeb.PageController do\n    use MyAppWeb, :controller\n    def index(conn, _params) do\n        text conn, 'Hello from Phoenix!'\n    end\nend"
+  },
+  {
+    "id": "Svelte",
+    "code": "<script>\n    let count = 0;\n    $: double = count * 2;\n</script>\n<button on:click={() => count++}>{double}</button>"
+  },
+  {
+    "id": "Actix-Web",
+    "code": "#[get('/')]\nasync fn home() -> impl Responder {\n    'Hello from Actix!'\n}"
+  }
+]
