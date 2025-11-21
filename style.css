@@ -233,3 +233,19 @@ li {
     z-index: 2;
     text-align: center;
 }
+
+#EnemyAttack form {
+    margin-top: 10px;
+}
+
+#SnippedContainer {
+    width: 500px; 
+    height: 175px !important; 
+    border: 1px solid black; 
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+#SnippedContainer pre {
+    text-align: left;
+}

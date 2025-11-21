@@ -425,13 +425,45 @@ buttons.forEach(e => {
     });
 });
 
+const 
 fetch('frameworks_examples.json')
-    .then(res => res.json())
-    .then(snippets => {
-        window.snippets = snippets;
-        console.log(snippets);
+    .then(r => r.json())
+    .then(data => {
+        window.snippets = data;
+        FrameworkDropdown();
+        ShowRandomSnippet();
     });
     
 function EnemyAttack() {
+    const randomIndex = Math.floor(Math.random() * window.snippets.length);
+    const randomSnippet = window.snippets[randomIndex];
+    ShowSnippets(randomSnippet.id);
+
+
+    FrameAnswer.addEventListener('')
+}
+
+function ShowSnippets(id) {
+    const snip = window.snippets.find(s => s.id === id);
+    if (!snip) return;
+
+    const SnippedContainer = document.getElementById('SnippedContainer');
+
+    const escapedCode = snip.code
+        .replace(new RegExp(snip.id, "gi"), "####")
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    SnippedContainer.innerHTML = `<pre><code>${escapedCode}</code></pre>`;
+}
+
+function FrameworkDropdown() {
+    const select = document.getElementById('FrameSelect');
     
+    window.snippets.forEach(snip => {
+        const option = document.createElement("option");
+        option.value = snip.id;
+        option.textContent = snip.id;
+        select.appendChild(option);
+    })
 }
