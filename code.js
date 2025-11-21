@@ -425,4 +425,6 @@ buttons.forEach(e => {
     });
 });
 
-function EnemyAttack() {}
+function EnemyAttack() {
+    
+}
