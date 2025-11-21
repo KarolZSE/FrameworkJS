@@ -224,6 +224,7 @@ li {
 
 #EnemyAttack {
     position: absolute;
+    display: none;
     width: 100%;
     height: 300px;
     border: 1px solid rebeccapurple;
@@ -234,16 +235,13 @@ li {
     text-align: center;
 }
 
-#EnemyAttack form {
-    margin-top: 10px;
-}
-
 #SnippedContainer {
     width: 500px; 
     height: 175px !important; 
     border: 1px solid black; 
     margin-left: auto; 
     margin-right: auto;
+    margin-bottom: 10px;
 }
 
 #SnippedContainer pre {

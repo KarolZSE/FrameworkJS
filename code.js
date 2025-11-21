@@ -374,6 +374,9 @@ const EnemyHealthBar = document.getElementById('EnemyHealthBar');
 const SlashAnimation = document.getElementById('SlashAnimation');
 const PlayerHealth = document.getElementById('PlayerHealth');
 
+
+const EnemyAttackHTML = document.getElementById('EnemyAttack');
+
 const buttons = document.querySelectorAll('.button');
 let HeavyAttack = false;
 
@@ -422,26 +425,40 @@ buttons.forEach(e => {
             InFight = false;
             console.log('Enemy Lost')
         }
+
+        EnemyAttack();
+        EnemyAttackHTML.style.display = 'inline';
     });
 });
 
-const 
+const FrameAnswer = document.getElementById('FrameAnswer');
+const select = document.getElementById('FrameSelect');
+let currentCodeSnippet;
+
 fetch('frameworks_examples.json')
     .then(r => r.json())
     .then(data => {
         window.snippets = data;
         FrameworkDropdown();
-        ShowRandomSnippet();
     });
     
 function EnemyAttack() {
     const randomIndex = Math.floor(Math.random() * window.snippets.length);
     const randomSnippet = window.snippets[randomIndex];
+    currentCodeSnippet = randomSnippet.id;
     ShowSnippets(randomSnippet.id);
-
-
-    FrameAnswer.addEventListener('')
 }
+
+FrameAnswer.addEventListener('click', () => {
+    if (select.value == currentCodeSnippet) {
+        console.log('You are right');
+    } else {
+        console.log("You are wrong!")
+        PlayerHealth.textContent = (Number(PlayerHealth.textContent) - Number(EnemyLevel.textContent) * Math.random() * 2).toFixed(2);
+    }
+
+    EnemyAttackHTML.style.display = 'none';
+});
 
 function ShowSnippets(id) {
     const snip = window.snippets.find(s => s.id === id);
@@ -458,8 +475,6 @@ function ShowSnippets(id) {
 }
 
 function FrameworkDropdown() {
-    const select = document.getElementById('FrameSelect');
-    
     window.snippets.forEach(snip => {
         const option = document.createElement("option");
         option.value = snip.id;
