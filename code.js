@@ -374,8 +374,8 @@ const EnemyHealthBar = document.getElementById('EnemyHealthBar');
 const SlashAnimation = document.getElementById('SlashAnimation');
 const PlayerHealth = document.getElementById('PlayerHealth');
 
-
 const EnemyAttackHTML = document.getElementById('EnemyAttack');
+const MiddleText = document.getElementById('MiddleText');
 
 const buttons = document.querySelectorAll('.button');
 let HeavyAttack = false;
@@ -426,8 +426,16 @@ buttons.forEach(e => {
             console.log('Enemy Lost')
         }
 
+
         EnemyAttack();
-        EnemyAttackHTML.style.display = 'inline';
+        MiddleText.textContent = 'Enemy Turn!';
+        MiddleText.style.color = 'rgba(255, 0, 0, 1)';
+        MiddleText.style.display = 'inline';
+        setTimeout(() => {
+            EnemyAttackHTML.style.display = 'inline';
+            MiddleText.style.display = 'none';
+            MiddleText.style.color = 'rgba(255, 0, 0, 0)';
+        }, 1200);
     });
 });
 
@@ -452,6 +460,13 @@ function EnemyAttack() {
 FrameAnswer.addEventListener('click', () => {
     if (select.value == currentCodeSnippet) {
         console.log('You are right');
+        MiddleText.textContent = "Right answer! Now it's your turn!";
+        MiddleText.style.color = 'rgba(40, 70, 2, 1)';
+        MiddleText.style.display = 'inline';
+        setTimeout(() => {
+            MiddleText.style.display = 'none';
+            MiddleText.style.color = 'rgba(255, 0, 0, 0)';
+        }, 1200);
     } else {
         console.log("You are wrong!")
         PlayerHealth.textContent = (Number(PlayerHealth.textContent) - Number(EnemyLevel.textContent) * Math.random() * 2).toFixed(2);
