@@ -84,6 +84,8 @@ function GridMaking() {
 
 let InFight = false;
 const PotionCount = document.getElementById('PotionCount');
+const CurrentRoomHTML = document.getElementById('CurrentRoom');
+let CurrentRoom = 1;
 
 GridMaking();
 // console.log(Elements);
@@ -118,6 +120,7 @@ document.addEventListener('keydown', (e) => {
     if (Stones[y][x] == 2) {
         console.log('test');
         PotionCount.textContent = Number(PotionCount.textContent) + 1;
+        CurrentRoomHTML.textContent = ++CurrentRoom;
         GridMaking();
     }
 
@@ -147,6 +150,7 @@ const PlayerHealthHTML = document.getElementById('PlayerHealth');
 const PlayerLevelHTML = document.getElementById('PlayerLevel');
 const EnemyLevelHTML = document.getElementById('EnemyLevel');
 
+
 let PlayerHealth = 10;
 let EnemyHealth = 10;
 
@@ -174,8 +178,12 @@ function moveEnemy() {
             PlayerMax = (PlayerLevel * (global['Armor'] / 100 + 1) * 10);
             PlayerHealth = PlayerMax;
             document.getElementById('PlayerMax').textContent = PlayerMax;
+            PlayerHealthHTML.textContent = PlayerHealth;
+            EnemyLevel = Math.max(1, Math.floor(Math.random() * 3) - 2 + CurrentRoom);
+            EnemyLevelHTML.textContent = EnemyLevel;
             EnemyMax = (EnemyLevel * 10);
             EnemyHealth = EnemyMax;
+            document.getElementById('EnemyHealth').textContent = EnemyHealth;
             document.getElementById('EnemyMax').textContent = EnemyMax;
             break;
         }
@@ -399,6 +407,7 @@ const MiddleText = document.getElementById('MiddleText');
 
 const buttons = document.querySelectorAll('.button');
 let HeavyAttack = false;
+let PlayerWon = 0;
 
 buttons.forEach(e => {
     e.addEventListener('click', () => {
@@ -449,16 +458,28 @@ buttons.forEach(e => {
                 PlayerHealth = Math.min(PlayerMax, PlayerHealth + temp2);
                 PlayerHealthHTML.textContent = PlayerHealth.toFixed(2);
                 MiddleText.innerHTML = `You drink a potion and regain ${temp2.toFixed(2)} hp!`;
-                PlayerHealthBar.style.background = `linear-gradient(to left, red ${PlayerMax - PlayerHealth}%, green 1%, green)`;
+                PlayerHealthBar.style.background = `linear-gradient(to left, red ${100 - ((PlayerHealth / PlayerMax) * 100)}%, green 1%, green)`;
             }
-
         };
 
-        EnemyHealthBar.style.background = `linear-gradient(to left, red ${EnemyMax - EnemyHealth}%, green 1%, green)`;
+        buttons.forEach(ev => {
+            ev.style.pointerEvents = 'none';
+        })
+        
+            EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - ((EnemyHealth / EnemyMax) * 100)}%, green 1%, green)`;
         if (EnemyHealth <= 0) {
             FightScreen.style.display = 'none';
             InFight = false;
-            console.log('Enemy Lost')
+            console.log('Enemy Lost');
+            EnemyAttackHTML.style.display = 'none';
+            PlayerWon++;
+            if (PlayerWon >= PlayerLevel) {
+                PlayerLevel++;
+                PlayerWon = 0;
+                MiddleText.textContent = 'You had defeated the enemy! You`ve leveled up!'
+            } else {
+                MiddleText.textContent = `You had defeated the enemy! Your are ${PlayerLevel - PlayerWon} wins from leveling up!`;
+            }
         }
 
 
@@ -504,10 +525,10 @@ FrameAnswer.addEventListener('click', () => {
         }, 1200);
     } else {
         console.log("You are wrong!")
-        let temp = (EnemyLevel * Math.random() * 2).toFixed(2);
+        let temp = (EnemyLevel * Math.random() * 5).toFixed(2);
         PlayerHealth -= temp;
         PlayerHealthHTML.textContent = PlayerHealth.toFixed(2);
-        PlayerHealthBar.style.background = `linear-gradient(to left, red ${PlayerMax - PlayerHealth}%, green 1%, green)`;
+        PlayerHealthBar.style.background = `linear-gradient(to left, red ${100 - ((PlayerHealth / PlayerMax) * 100)}%, green 1%, green)`;
         MiddleText.textContent = `Wrong answer! You recieve ${temp} damage! Now it's your turn!`;
         MiddleText.style.color = 'rgba(255, 0, 0, 1)';
         MiddleText.style.display = 'inline';
@@ -518,6 +539,9 @@ FrameAnswer.addEventListener('click', () => {
     
     }
 
+    buttons.forEach(ev => {
+        ev.style.pointerEvents = 'auto';
+    });
     EnemyAttackHTML.style.display = 'none';
 });
 
