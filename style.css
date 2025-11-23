@@ -101,15 +101,22 @@ body {
 }
 
 .chest {
-    background: aqua;
+    background: url('chest_01.png');
+    background-size: cover;
+    image-rendering: pixelated;
 }
 
 .monster {
-    background: greenyellow;
+    background: url('Frameworks.png');
+    background-size: 200px 40px;
+    background-position: 0 0;
 }
 
 .door {
-    background: #ffae00;
+    background: url('door-3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
 }
 
 .FullSlot {
@@ -150,7 +157,7 @@ li {
     height: 600px;
     border: 1px solid black;
     background: #fff;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-between;
     z-index: 2;

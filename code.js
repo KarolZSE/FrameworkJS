@@ -1,4 +1,5 @@
 const GameDir = document.getElementById('GameDir');
+const FightScreen = document.getElementById('FightScreen');
 let Stones = [];
 let Elements = [];
 
@@ -63,6 +64,7 @@ function GridMaking() {
             if (!Stones[i][j] && Math.random() > 0.9) {
                 const Monster = document.createElement('div');
                 Monster.classList.add('monster');
+                Monster.style.backgroundPosition = `-${Math.floor(Math.random() * 5) * 40}px 0`;
                 block.appendChild(Monster);
             }
 
@@ -80,7 +82,7 @@ function GridMaking() {
     } 
 };
 
-let InFight = true;
+let InFight = false;
 const PotionCount = document.getElementById('PotionCount');
 
 GridMaking();
@@ -129,6 +131,25 @@ document.addEventListener('keydown', (e) => {
     moveEnemy();
 });
 
+let PlayerMax = 10;
+let EnemyMax = 10;
+let global = {};
+global['Armor'] = 0;
+
+let PlayerLevel = 1;
+let EnemyLevel = 1;
+
+const PlayerHealthBar = document.getElementById('PlayerHealthBar');
+const EnemyHealthBar = document.getElementById('EnemyHealthBar');
+const SlashAnimation = document.getElementById('SlashAnimation');
+const PlayerHealthHTML = document.getElementById('PlayerHealth');
+
+const PlayerLevelHTML = document.getElementById('PlayerLevel');
+const EnemyLevelHTML = document.getElementById('EnemyLevel');
+
+let PlayerHealth = 10;
+let EnemyHealth = 10;
+
 function moveEnemy() {
     const monsters = getMonsters();
 
@@ -149,6 +170,13 @@ function moveEnemy() {
         if (m.x === x && m.y === y) {
             Elements[m.y][m.x].removeChild(m.el);
             console.log('Enemy Touched the player');
+            FightScreen.style.display = 'flex';
+            PlayerMax = (PlayerLevel * (global['Armor'] / 100 + 1) * 10);
+            PlayerHealth = PlayerMax;
+            document.getElementById('PlayerMax').textContent = PlayerMax;
+            EnemyMax = (EnemyLevel * 10);
+            EnemyHealth = EnemyMax;
+            document.getElementById('EnemyMax').textContent = EnemyMax;
             break;
         }
     }
@@ -270,9 +298,7 @@ const InfoMenu = document.getElementById('InfoMenu');
 const IMG = document.querySelector('InfoMenu img');
 const Rarity = document.getElementById('Rarity');
 const ItemType = document.getElementById('ItemType');
-let global = {};
 global['Weapon'] = 0;
-global['Armor'] = 0;
 let equipped = {};
 
 InfoMenu.addEventListener('click', () => {
@@ -368,12 +394,6 @@ function RandomDrop() {
 }
 
 // Button functionality
-const PlayerLevel = document.getElementById('PlayerLevel');
-const EnemyHealth = document.getElementById('EnemyHealth');
-const EnemyHealthBar = document.getElementById('EnemyHealthBar');
-const SlashAnimation = document.getElementById('SlashAnimation');
-const PlayerHealth = document.getElementById('PlayerHealth');
-
 const EnemyAttackHTML = document.getElementById('EnemyAttack');
 const MiddleText = document.getElementById('MiddleText');
 
@@ -383,13 +403,13 @@ let HeavyAttack = false;
 buttons.forEach(e => {
     e.addEventListener('click', () => {
         if (e.textContent === 'Attack') {
-            let temp = (Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2).toFixed(2);
-            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - temp).toFixed(2);
+            let temp = (PlayerLevel * (global['Weapon'] / 100 + 1) * Math.random() * 5).toFixed(2);
+            EnemyHealth -= temp;
+            document.getElementById('EnemyHealth').textContent = EnemyHealth.toFixed(2);
             MiddleText.innerHTML = `You deal ${temp} damage! <br> Enemy turn starts!`;
             
             for (let i = 0; i < 4; i++) {
                 setTimeout(() => {
-                    console.log('bruh');
                     SlashAnimation.style.backgroundPosition = `-${i * 250}px 0`;
                 }, 100 * i); 
             }
@@ -400,8 +420,9 @@ buttons.forEach(e => {
 
         if (e.textContent === 'Heavy Attack' && HeavyAttack) {
             HeavyAttack = false;
-            let temp = (Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2 * 3).toFixed(2);
-            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - temp).toFixed(2);
+            let temp = (PlayerLevel * (global['Weapon'] / 100 + 1) * Math.random() * 15).toFixed(2);
+            EnemyHealth -= temp;
+            EnemyHealth.textContent = EnemyHealth.toFixed(2);
             MiddleText.innerHTML = `Your heavy attack deals ${temp} damage! <br> Enemy turn starts!`;
 
             for (let i = 5; i < 9; i++) {
@@ -412,26 +433,29 @@ buttons.forEach(e => {
             setTimeout(() => {
                 SlashAnimation.style.backgroundPosition = `-2500px 0`;                
             }, 500);
+
         } else if (e.textContent === 'Heavy Attack') {
             MiddleText.innerHTML = `You take your turn to prepare your heavy attack! Enemy turn starts!`;
             HeavyAttack = true;
         }
 
         if (e.textContent === 'Heal') {
-            if (Number(PotionCount.textContent) < 0) {
+            if (Number(PotionCount.textContent) <= 0) {
                 MiddleText.innerHTML = 'You look through your sack, but can`t find any potions! Enemy turn starts!';
             } else {
                 PotionCount.textContent = Number(PotionCount.textContent) - 1;
-                console.log(Number(PlayerHealth.textContent), Math.random() * 50)
-                let temp = (Number(PlayerHealth.textContent) + Math.random() * 50).toFixed(2);
-                PlayerHealth.textContent = Math.min(100, temp);
-                MiddleText.innerHTML = `You drink a potion and regain ${temp} hp!`;
+
+                let temp2 = Math.random() * 50;
+                PlayerHealth = Math.min(PlayerMax, PlayerHealth + temp2);
+                PlayerHealthHTML.textContent = PlayerHealth.toFixed(2);
+                MiddleText.innerHTML = `You drink a potion and regain ${temp2.toFixed(2)} hp!`;
+                PlayerHealthBar.style.background = `linear-gradient(to left, red ${PlayerMax - PlayerHealth}%, green 1%, green)`;
             }
 
         };
 
-        EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - Number(EnemyHealth.textContent)}%, green 1%, green)`;
-        if (Number(EnemyHealth.textContent) <= 0) {
+        EnemyHealthBar.style.background = `linear-gradient(to left, red ${EnemyMax - EnemyHealth}%, green 1%, green)`;
+        if (EnemyHealth <= 0) {
             FightScreen.style.display = 'none';
             InFight = false;
             console.log('Enemy Lost')
@@ -480,8 +504,10 @@ FrameAnswer.addEventListener('click', () => {
         }, 1200);
     } else {
         console.log("You are wrong!")
-        let temp = (Number(EnemyLevel.textContent) * Math.random() * 2).toFixed(2);
-        PlayerHealth.textContent = (Number(PlayerHealth.textContent)) - temp;
+        let temp = (EnemyLevel * Math.random() * 2).toFixed(2);
+        PlayerHealth -= temp;
+        PlayerHealthHTML.textContent = PlayerHealth.toFixed(2);
+        PlayerHealthBar.style.background = `linear-gradient(to left, red ${PlayerMax - PlayerHealth}%, green 1%, green)`;
         MiddleText.textContent = `Wrong answer! You recieve ${temp} damage! Now it's your turn!`;
         MiddleText.style.color = 'rgba(255, 0, 0, 1)';
         MiddleText.style.display = 'inline';
