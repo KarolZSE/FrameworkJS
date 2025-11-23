@@ -146,6 +146,7 @@ const PlayerHealthBar = document.getElementById('PlayerHealthBar');
 const EnemyHealthBar = document.getElementById('EnemyHealthBar');
 const SlashAnimation = document.getElementById('SlashAnimation');
 const PlayerHealthHTML = document.getElementById('PlayerHealth');
+const EnemyHealthHTML = document.getElementById('EnemyHealth');
 
 const PlayerLevelHTML = document.getElementById('PlayerLevel');
 const EnemyLevelHTML = document.getElementById('EnemyLevel');
@@ -173,6 +174,7 @@ function moveEnemy() {
         
         if (m.x === x && m.y === y) {
             Elements[m.y][m.x].removeChild(m.el);
+            InFight = true;
             console.log('Enemy Touched the player');
             FightScreen.style.display = 'flex';
             PlayerMax = (PlayerLevel * (global['Armor'] / 100 + 1) * 10);
@@ -183,8 +185,10 @@ function moveEnemy() {
             EnemyLevelHTML.textContent = EnemyLevel;
             EnemyMax = (EnemyLevel * 10);
             EnemyHealth = EnemyMax;
-            document.getElementById('EnemyHealth').textContent = EnemyHealth;
+            EnemyHealthHTML.textContent = EnemyHealth;
             document.getElementById('EnemyMax').textContent = EnemyMax;
+            PlayerHealthBar.style.background = 'green';
+            EnemyHealthBar.style.background = 'green';
             break;
         }
     }
@@ -414,8 +418,13 @@ buttons.forEach(e => {
         if (e.textContent === 'Attack') {
             let temp = (PlayerLevel * (global['Weapon'] / 100 + 1) * Math.random() * 5).toFixed(2);
             EnemyHealth -= temp;
-            document.getElementById('EnemyHealth').textContent = EnemyHealth.toFixed(2);
-            MiddleText.innerHTML = `You deal ${temp} damage! <br> Enemy turn starts!`;
+            EnemyHealthHTML.textContent = EnemyHealth.toFixed(2);
+            if (HeavyAttack) {
+                MiddleText.innerHTML = `You stopped being prepared to do a heavy attack. You deal ${temp} damage! <br> Enemy turn starts!`;   
+            } else MiddleText.innerHTML = `You deal ${temp} damage! <br> Enemy turn starts!`;
+            
+            HeavyAttack = false;
+            MiddleText.style.color = 'rgba(0, 255, 0, 1)';
             
             for (let i = 0; i < 4; i++) {
                 setTimeout(() => {
@@ -431,9 +440,9 @@ buttons.forEach(e => {
             HeavyAttack = false;
             let temp = (PlayerLevel * (global['Weapon'] / 100 + 1) * Math.random() * 15).toFixed(2);
             EnemyHealth -= temp;
-            EnemyHealth.textContent = EnemyHealth.toFixed(2);
+            EnemyHealthHTML.textContent = EnemyHealth.toFixed(2);
             MiddleText.innerHTML = `Your heavy attack deals ${temp} damage! <br> Enemy turn starts!`;
-
+            MiddleText.style.color = 'rgba(0, 255, 0, 1)';
             for (let i = 5; i < 9; i++) {
                 setTimeout(() => {
                     SlashAnimation.style.backgroundPosition = `-${i * 250}px 0`;
@@ -445,21 +454,33 @@ buttons.forEach(e => {
 
         } else if (e.textContent === 'Heavy Attack') {
             MiddleText.innerHTML = `You take your turn to prepare your heavy attack! Enemy turn starts!`;
+            MiddleText.style.color = 'rgba(0, 255, 0, 1)';
             HeavyAttack = true;
         }
 
         if (e.textContent === 'Heal') {
             if (Number(PotionCount.textContent) <= 0) {
-                MiddleText.innerHTML = 'You look through your sack, but can`t find any potions! Enemy turn starts!';
+                if (HeavyAttack) {
+                    MiddleText.innerHTML = `You stopped being prepared to do a heavy attack. You look through your sack, but can't find any potions! Enemy turn starts!`;
+                } else {
+                    MiddleText.innerHTML = 'You look through your sack, but can`t find any potions! Enemy turn starts!';
+                }
+                MiddleText.style.color = 'rgba(255, 0, 0, 1)';
             } else {
                 PotionCount.textContent = Number(PotionCount.textContent) - 1;
 
                 let temp2 = Math.random() * 50;
                 PlayerHealth = Math.min(PlayerMax, PlayerHealth + temp2);
                 PlayerHealthHTML.textContent = PlayerHealth.toFixed(2);
-                MiddleText.innerHTML = `You drink a potion and regain ${temp2.toFixed(2)} hp!`;
+                if (HeavyAttack) {
+                    MiddleText.innerHTML = `You stopped being prepared to do a heavy attack. You drink a potion and regain ${temp2.toFixed(2)} hp!`;
+                } else {
+                    MiddleText.innerHTML = `You drink a potion and regain ${temp2.toFixed(2)} hp!`;
+                }
+                MiddleText.style.color = 'rgba(0, 255, 0, 1)';
                 PlayerHealthBar.style.background = `linear-gradient(to left, red ${100 - ((PlayerHealth / PlayerMax) * 100)}%, green 1%, green)`;
             }
+            HeavyAttack = false;
         };
 
         buttons.forEach(ev => {
@@ -476,22 +497,22 @@ buttons.forEach(e => {
             if (PlayerWon >= PlayerLevel) {
                 PlayerLevel++;
                 PlayerWon = 0;
-                MiddleText.textContent = 'You had defeated the enemy! You`ve leveled up!'
+                MiddleText.textContent = 'You had defeated the enemy! You`ve leveled up!';
             } else {
                 MiddleText.textContent = `You had defeated the enemy! Your are ${PlayerLevel - PlayerWon} wins from leveling up!`;
             }
+            MiddleText.style.color = 'rgba(0, 255, 0, 1)';
         }
 
 
         EnemyAttack();
         
-        MiddleText.style.color = 'rgba(255, 0, 0, 1)';
         MiddleText.style.display = 'inline';
         setTimeout(() => {
             EnemyAttackHTML.style.display = 'inline';
             MiddleText.style.display = 'none';
             MiddleText.style.color = 'rgba(255, 0, 0, 0)';
-        }, 1200);
+        }, 2000);
     });
 });
 
@@ -516,8 +537,8 @@ function EnemyAttack() {
 FrameAnswer.addEventListener('click', () => {
     if (select.value == currentCodeSnippet) {
         console.log('You are right');
-        MiddleText.textContent = "Right answer! Now it's your turn!";
-        MiddleText.style.color = 'rgba(40, 70, 2, 1)';
+        MiddleText.textContent = "Right answer! You block enemy's attack! Now it's your turn!";
+        MiddleText.style.color = 'rgba(0, 255, 0, 1)';
         MiddleText.style.display = 'inline';
         setTimeout(() => {
             MiddleText.style.display = 'none';
@@ -529,6 +550,10 @@ FrameAnswer.addEventListener('click', () => {
         PlayerHealth -= temp;
         PlayerHealthHTML.textContent = PlayerHealth.toFixed(2);
         PlayerHealthBar.style.background = `linear-gradient(to left, red ${100 - ((PlayerHealth / PlayerMax) * 100)}%, green 1%, green)`;
+        if (PlayerHealth <= 0) {
+            MiddleText.textContent = 'You`ve been defeated! You cannot continue...';
+            return;
+        }
         MiddleText.textContent = `Wrong answer! You recieve ${temp} damage! Now it's your turn!`;
         MiddleText.style.color = 'rgba(255, 0, 0, 1)';
         MiddleText.style.display = 'inline';
