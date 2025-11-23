@@ -20,7 +20,15 @@ function GridMaking() {
             const block = document.createElement('div');
 
             Elements[i][j] = block;
+            GameDir.appendChild(block);
             // block.textContent = j;
+
+            if (j == 0 && i == 0) {
+                const Rect = GameDir.getBoundingClientRect();
+                Player.style.left = Rect.left + 1 + 'px';
+                Player.style.top = Rect.top + 1 + 'px';
+                continue;
+            }
 
             if (Stones[i][Math.max(0, j - 1)] && Math.random() > 0.2) {
                 WallMaking();
@@ -40,7 +48,7 @@ function GridMaking() {
                         block.classList.remove('wall');
                         block.textContent = '';
                     } else {
-                        block.textContent = destruction_level;
+                        block.style.backgroundPosition = `-${40 * (destruction_level - 1)}px 0`;
                    }   
                 });
             };
@@ -52,14 +60,6 @@ function GridMaking() {
             }
 
             // Player spawn
-            if (j == 0 && i == 0) {
-                const Rect = GameDir.getBoundingClientRect();
-                Player.style.left = Rect.left + 1 + 'px';
-                Player.style.top = Rect.top + 1 + 'px';
-            }
-
-            GameDir.appendChild(block);
-
             // Monster Spawn
             if (!Stones[i][j] && Math.random() > 0.9) {
                 const Monster = document.createElement('div');
@@ -156,6 +156,8 @@ let PlayerHealth = 10;
 let EnemyHealth = 10;
 
 function moveEnemy() {
+    if (InFight) return;
+
     const monsters = getMonsters();
 
     for (let m of monsters) {
@@ -173,22 +175,29 @@ function moveEnemy() {
         }
         
         if (m.x === x && m.y === y) {
-            Elements[m.y][m.x].removeChild(m.el);
+            MiddleText.textContent = 'Enemy attacks you!'
+            MiddleText.style.color = 'rgba(255, 0, 0, 1)';
+            MiddleText.style.display = 'inline';
             InFight = true;
-            console.log('Enemy Touched the player');
-            FightScreen.style.display = 'flex';
-            PlayerMax = (PlayerLevel * (global['Armor'] / 100 + 1) * 10);
-            PlayerHealth = PlayerMax;
-            document.getElementById('PlayerMax').textContent = PlayerMax;
-            PlayerHealthHTML.textContent = PlayerHealth;
-            EnemyLevel = Math.max(1, Math.floor(Math.random() * 3) - 2 + CurrentRoom);
-            EnemyLevelHTML.textContent = EnemyLevel;
-            EnemyMax = (EnemyLevel * 10);
-            EnemyHealth = EnemyMax;
-            EnemyHealthHTML.textContent = EnemyHealth;
-            document.getElementById('EnemyMax').textContent = EnemyMax;
-            PlayerHealthBar.style.background = 'green';
-            EnemyHealthBar.style.background = 'green';
+            setTimeout(() => {
+                MiddleText.style.display = 'none';
+                MiddleText.style.color = 'rgba(255, 0, 0, 0)';
+                Elements[m.y][m.x].removeChild(m.el);
+                console.log('Enemy Touched the player');
+                FightScreen.style.display = 'flex';
+                PlayerMax = (PlayerLevel * (global['Armor'] / 100 + 1) * 10);
+                PlayerHealth = PlayerMax;
+                document.getElementById('PlayerMax').textContent = PlayerMax;
+                PlayerHealthHTML.textContent = PlayerHealth;
+                EnemyLevel = Math.max(1, Math.floor(Math.random() * 3) - 2 + CurrentRoom);
+                EnemyLevelHTML.textContent = EnemyLevel;
+                EnemyMax = (EnemyLevel * 10);
+                EnemyHealth = EnemyMax;
+                EnemyHealthHTML.textContent = EnemyHealth;
+                document.getElementById('EnemyMax').textContent = EnemyMax;
+                PlayerHealthBar.style.background = 'green';
+                EnemyHealthBar.style.background = 'green';
+            }, 1500);
             break;
         }
     }

@@ -44,8 +44,12 @@ body {
 }
 
 .wall {
-    background: #000;
-    color: aqua;
+    background-color: grey;
+    background-image: url('breaking.png');
+    image-rendering: pixelated;
+    background-size: 120px 40px;
+    background-repeat: no-repeat;
+    background-position: -120px 0;
 }
 
 #Player, .monster, .chest {
