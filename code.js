@@ -213,6 +213,7 @@ function moveEnemy() {
                 document.getElementById('EnemyMax').textContent = EnemyMax;
                 PlayerHealthBar.style.background = 'green';
                 EnemyHealthBar.style.background = 'green';
+                PlayerLevelHTML.textContent = PlayerLevel;
             }, 1500);
             break;
         }
