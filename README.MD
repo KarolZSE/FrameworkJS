@@ -1,12 +1,9 @@
 # Fight the frameworks
-Come and fight with framework monsters, beasts with the shape of a frameworks,
-they will ask you a lot of questions and you better answer or be destroyed!
-
-# Gameplay
+Come and fight with framework monsters, beasts with the shape of a frameworks, they will ask you a lot of questions! Answer or be destroyed! For instructions on how to play please visit the README!
 
 ## Exploration
 You can navigate through the caves using **WASD**.
-- You can mine using your left click on the stone walls.
+- You can mine blocks, by **left clicking** on the stone wall you want to break.
 
 - At the edges of each chamber you may find a **door**. Entering a door: 
     - Always leads to a new room in the dungeon.
