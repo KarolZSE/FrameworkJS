@@ -1,5 +1,5 @@
 # Fight the frameworks
-Come and fight with framework monsters, beasts with the shape of a frameworks, they will ask you a lot of questions! Answer or be destroyed! For instructions on how to play please visit the README!
+Come and fight with framework monsters, beasts with the shape of a frameworks, they will ask you a lot of questions! Answer or be destroyed!
 
 ## Exploration
 You can navigate through the caves using **WASD**.
