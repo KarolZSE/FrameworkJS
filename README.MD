@@ -3,23 +3,40 @@ Come and fight with framework monsters, beasts with the shape of a frameworks,
 they will ask you a lot of questions and you better answer or be destroyed!
 
 # Gameplay
-At first you can move through the caves using WASD on your keyboard.
+
+## Exploration
+You can navigate through the caves using **WASD**.
 - You can mine using your left click on the stone walls.
 
-- On the edges of the cave you can encounter a door - it always leads to a new room in the dungeon, going through it gives you a single potion and makes the enemies stronger, but remember after going through a door you cannot come back to the room before.
+- At the edges of each chamber you may find a **door**. Entering a door: 
+    - Always leads to a new room in the dungeon.
+    - Grants you **1 potion of healing**.
+    - **Makes the enemies stronger**.
+    - Prevents you from returning to the previous room.
 
-- You can earn armor and weapons by opening chests, which you can randomly encounter along the dungeon, to wear a new piece you have to right click on its icon in the inventory.
+## Loot and Inventory
+In the dungeoun you can encounter **chests** that contain armor and weapons.
+- To equip a new item, **right click its icon** in the inventory.
 
-- While you can't see them, they can see you. I'm talking about framework monsters, when you encounter them they will always initiate a fight:
+## Monsters and fights
+Monsters can see you, even when you can't see them. When they find you they will always initiate a fight:
 - Their level will depend on how deep inside the cave you are.
-- In case of a fight you will always be the first to start, you can: **Attack, heavy attack or heal**:
-- By attacking you deal damage to the monster (the damage is affected by your luck, weapons rarity and level)
-- By heavy attacking you use one turn for preparation and on the next you can click heavy attack to hit the enemy with triple the force.
-- By healing you use one of your potions (which you get by going through doors) to regain a big part of your hp.
-- whenever your action is the next thing that will happen is the enemy's turn, when it attacks you can block the damage by identifying the framework snippet it throws at you (but if you fail you get hit by the full damage of the attack).
-- You win if your opponent's HP hits 0.
-- You lose if your hp drops to 0.
+- ### Your Actions
+    - You will always be the first to start, you can choose to:
+    - **Attack**: Deal damage based on your luck, weapons rarity, and level.
+    - **Heavy attack**: Spend one turn preparing and on the following turn, use heavy attack again to deal **triple the force**.
+    - **Heal**: Use one of your potions (earned by going through doors) to restore a big part of your HP.
+- After your action. it becomes the enemy's turn.
+- ### Enemy Turn
+    - When the monster attacks:
+        - You can **block the damage** by correctly identifying the framework snippet it throws at you.
+        - Fail and take the **full hit**.
+
+## Victory and Defeat
+- You **win fights** if your opponent's HP reaches 0.
+- You **lose** if your hp drops to 0.
+- The exploration of the cave is endless...
 
 # Attribution
-Armor - https://zeno.itch.io/armor-icons
-Doors - https://hazushadc.itch.io/pixel-door-assets
+- Armor - https://zeno.itch.io/armor-icons
+- Doors - https://hazushadc.itch.io/pixel-door-assets
