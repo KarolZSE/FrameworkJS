@@ -552,6 +552,10 @@ FrameAnswer.addEventListener('click', () => {
         PlayerHealthBar.style.background = `linear-gradient(to left, red ${100 - ((PlayerHealth / PlayerMax) * 100)}%, green 1%, green)`;
         if (PlayerHealth <= 0) {
             MiddleText.textContent = 'You`ve been defeated! You cannot continue...';
+            MiddleText.style.color = 'rgba(255, 0, 0, 1)';
+            MiddleText.style.display = 'inline';
+            MiddleText.style.zIndex = 10;
+            FrameAnswer.style.pointerEvents = 'none';
             return;
         }
         MiddleText.textContent = `Wrong answer! You recieve ${temp} damage! Now it's your turn!`;
