@@ -2,6 +2,7 @@ const GameDir = document.getElementById('GameDir');
 const FightScreen = document.getElementById('FightScreen');
 let Stones = [];
 let Elements = [];
+let LightOverlay;
 
 let x = 0, y = 0;
 const Player = document.getElementById('Player');
@@ -11,6 +12,13 @@ function GridMaking() {
     Elements = [];
 
     GameDir.innerHTML = '';
+
+    // Creates the darkness
+    LightOverlay = document.createElement('div');
+    LightOverlay.id = 'LightOverlay';
+    LightOverlay.style.position = 'absolute';
+    GameDir.appendChild(LightOverlay);
+
     x = 0, y = 0;
 
     for (let i = 0; i < 15; i++) {
@@ -21,8 +29,8 @@ function GridMaking() {
 
             Elements[i][j] = block;
             GameDir.appendChild(block);
-            // block.textContent = j;
 
+            // Player Spawn
             if (j == 0 && i == 0) {
                 const Rect = GameDir.getBoundingClientRect();
                 Player.style.left = Rect.left + 1 + 'px';
@@ -30,6 +38,7 @@ function GridMaking() {
                 continue;
             }
 
+           // Spawns Walls (more probable to make a wall near a wall)
             if (Stones[i][Math.max(0, j - 1)] && Math.random() > 0.2) {
                 WallMaking();
             } else if (Math.random() > 0.8) {
@@ -53,13 +62,13 @@ function GridMaking() {
                 });
             };
 
+            // Creates doors
             if ((j == 0 || j == 14 || i == 0 || i == 14) && Math.random() > 0.9) {
                 block.classList.remove('wall');
                 block.classList.add('door');
                 Stones[i][j] = 2;
             }
 
-            // Player spawn
             // Monster Spawn
             if (!Stones[i][j] && Math.random() > 0.9) {
                 const Monster = document.createElement('div');
@@ -88,10 +97,11 @@ const CurrentRoomHTML = document.getElementById('CurrentRoom');
 let CurrentRoom = 1;
 
 GridMaking();
-// console.log(Elements);
+// Handles user inputs
 document.addEventListener('keydown', (e) => {
     if (InFight) return;
     if (e.key.toLowerCase() == 'w') {
+        // this if below checks if the user tries to go throught a wall
         if (y - 1 < 0 || Stones[y - 1][x] == 1) return;
         y--;
         Player.style.top = Number(Player.offsetTop) - 40 + 'px';
@@ -117,6 +127,7 @@ document.addEventListener('keydown', (e) => {
         Player.style.transform = 'scaleX(-1)';
     };
 
+    // Check if player went throught a door
     if (Stones[y][x] == 2) {
         console.log('test');
         PotionCount.textContent = Number(PotionCount.textContent) + 1;
@@ -124,6 +135,7 @@ document.addEventListener('keydown', (e) => {
         GridMaking();
     }
 
+    // Check if the user opened a chest
     if (Stones[y][x] == 3) {
         InfoMenu.style.display = 'inline';
         Elements[y][x].innerHTML = '';
@@ -131,6 +143,8 @@ document.addEventListener('keydown', (e) => {
         RandomDrop();
     }
 
+    // Makes the dark overlay follow the player 
+    LightOverlay.style.background = `radial-gradient(circle at ${x * 40 + 20}px ${y * 40 + 20}px, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 1) 90px)`;
     moveEnemy();
 });
 
@@ -156,6 +170,7 @@ let PlayerHealth = 10;
 let EnemyHealth = 10;
 
 function moveEnemy() {
+    // Does A* path finding for every enemy
     if (InFight) return;
 
     const monsters = getMonsters();
@@ -174,6 +189,7 @@ function moveEnemy() {
             Elements[m.y][m.x].appendChild(m.el);
         }
         
+        // Checks if the enemy touches the player
         if (m.x === x && m.y === y) {
             MiddleText.textContent = 'Enemy attacks you!'
             MiddleText.style.color = 'rgba(255, 0, 0, 1)';
@@ -202,6 +218,8 @@ function moveEnemy() {
         }
     }
 }
+
+// Accual A* path finding function (the one before calls this one for every enemy)
 function astar(start, goal) {
     let openSet = [];
     let closedSet = new Set();
@@ -278,6 +296,7 @@ function astar(start, goal) {
     return null;
 }
 
+// Finds and lists all of the monster
 function getMonsters() {
     let monsters = [];
     for (let i = 0; i < 15; i++) {
@@ -298,8 +317,7 @@ function getMonsters() {
     return monsters;
 }
 
-// Inventory Placeholder
-
+// Creates Inventory Placeholders
 const Inv = document.getElementById('Inventory');
 
 let Slots = [];
@@ -326,6 +344,7 @@ InfoMenu.addEventListener('click', () => {
     InfoMenu.style.display = 'none';
 })
 
+// Generates a random chest drop for the player
 function RandomDrop() {
     let Placed, Type;
     for (let i = 0; i < 5; i++) {
@@ -381,12 +400,12 @@ function RandomDrop() {
         ItemType.textContent = 'Sword';
         x = 4;
     }
-
                 Slots[i][j].classList.add('FullSlot');
                 document.getElementById('Preview').style.backgroundPosition = `-${300 * x}px -${300 * y}px`;
                 Slots[i][j].style.backgroundPosition = `-${60 * x}px -${60 * y}px`;
                 Placed = true;
 
+                // Makes the item usable
                 Slots[i][j].addEventListener("click", () => {
                     moveEnemy();
                     let temp = document.getElementById(Slots[i][j].dataset.type).style;
@@ -401,7 +420,6 @@ function RandomDrop() {
                         global[Type] -= current.r * 100 / 4;
                     };
 
-                    // if (temp.backgroundPositionY / 80 == y) return; 
                     temp.backgroundPosition = `-${80 * x}px -${80 * y}px`;
                     
                     global[Type] += r * 100 / 4;
@@ -414,7 +432,6 @@ function RandomDrop() {
     }
 }
 
-// Button functionality
 const EnemyAttackHTML = document.getElementById('EnemyAttack');
 const MiddleText = document.getElementById('MiddleText');
 
@@ -422,6 +439,7 @@ const buttons = document.querySelectorAll('.button');
 let HeavyAttack = false;
 let PlayerWon = 0;
 
+// Button logic in a fight
 buttons.forEach(e => {
     e.addEventListener('click', () => {
         if (e.textContent === 'Attack') {
@@ -492,11 +510,14 @@ buttons.forEach(e => {
             HeavyAttack = false;
         };
 
+        // Turns off the button so the player cannot click it while the animation is playing
         buttons.forEach(ev => {
             ev.style.pointerEvents = 'none';
         })
         
             EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - ((EnemyHealth / EnemyMax) * 100)}%, green 1%, green)`;
+
+        // Checks if enemy lost
         if (EnemyHealth <= 0) {
             FightScreen.style.display = 'none';
             InFight = false;
@@ -513,7 +534,6 @@ buttons.forEach(e => {
             MiddleText.style.color = 'rgba(0, 255, 0, 1)';
         }
 
-
         EnemyAttack();
         
         MiddleText.style.display = 'inline';
@@ -529,13 +549,15 @@ const FrameAnswer = document.getElementById('FrameAnswer');
 const select = document.getElementById('FrameSelect');
 let currentCodeSnippet;
 
+// Fetches the snippets enemy throws at you
 fetch('frameworks_examples.json')
     .then(r => r.json())
     .then(data => {
         window.snippets = data;
         FrameworkDropdown();
     });
-    
+
+// Pickes a random snippet from the list
 function EnemyAttack() {
     const randomIndex = Math.floor(Math.random() * window.snippets.length);
     const randomSnippet = window.snippets[randomIndex];
@@ -543,6 +565,7 @@ function EnemyAttack() {
     ShowSnippets(randomSnippet.id);
 }
 
+// Check if the answer was correct (for the snippet)
 FrameAnswer.addEventListener('click', () => {
     if (select.value == currentCodeSnippet) {
         console.log('You are right');
@@ -583,20 +606,34 @@ FrameAnswer.addEventListener('click', () => {
     EnemyAttackHTML.style.display = 'none';
 });
 
+// Censors the snippet from the name of the framework and shows them
 function ShowSnippets(id) {
     const snip = window.snippets.find(s => s.id === id);
     if (!snip) return;
 
     const SnippedContainer = document.getElementById('SnippedContainer');
 
-    const escapedCode = snip.code
-        .replace(new RegExp(snip.id, "gi"), "####")
+    const words = snip.id
+        .replace(/[^a-z0-9]+/gi," ")
+        .trim()
+        .split(/\s+/)
+        .map(w => w.toLowerCase());
+
+    let escapedCode = snip.code
+
+    for (const word of words) {
+        const reg = new RegExp(word, "gi");
+        escapedCode = escapedCode.replace(reg, "####");
+    }
+    
+    escapedCode = escapedCode
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
     SnippedContainer.innerHTML = `<pre><code>${escapedCode}</code></pre>`;
 }
 
+// Makes the list of options display every framework in the json file
 function FrameworkDropdown() {
     window.snippets.forEach(snip => {
         const option = document.createElement("option");
