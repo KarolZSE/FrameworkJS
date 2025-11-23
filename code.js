@@ -383,7 +383,9 @@ let HeavyAttack = false;
 buttons.forEach(e => {
     e.addEventListener('click', () => {
         if (e.textContent === 'Attack') {
-            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2).toFixed(2);
+            let temp = (Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2).toFixed(2);
+            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - temp).toFixed(2);
+            MiddleText.innerHTML = `You deal ${temp} damage! <br> Enemy turn starts!`;
             
             for (let i = 0; i < 4; i++) {
                 setTimeout(() => {
@@ -398,8 +400,10 @@ buttons.forEach(e => {
 
         if (e.textContent === 'Heavy Attack' && HeavyAttack) {
             HeavyAttack = false;
-            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2 * 3).toFixed(2);
-            
+            let temp = (Number(PlayerLevel.textContent) * (global['Weapon'] / 100 + 1) * Math.random() * 2 * 3).toFixed(2);
+            EnemyHealth.textContent = (Number(EnemyHealth.textContent) - temp).toFixed(2);
+            MiddleText.innerHTML = `Your heavy attack deals ${temp} damage! <br> Enemy turn starts!`;
+
             for (let i = 5; i < 9; i++) {
                 setTimeout(() => {
                     SlashAnimation.style.backgroundPosition = `-${i * 250}px 0`;
@@ -409,14 +413,21 @@ buttons.forEach(e => {
                 SlashAnimation.style.backgroundPosition = `-2500px 0`;                
             }, 500);
         } else if (e.textContent === 'Heavy Attack') {
-            console.log('heavy attack on!');
+            MiddleText.innerHTML = `You take your turn to prepare your heavy attack! Enemy turn starts!`;
             HeavyAttack = true;
         }
 
         if (e.textContent === 'Heal') {
-            PotionCount.textContent = Number(PotionCount.textContent) - 1;
-            console.log(Number(PlayerHealth.textContent), Math.random() * 50)
-            PlayerHealth.textContent = Math.min(100, Number(PlayerHealth.textContent) + Math.random() * 50);
+            if (Number(PotionCount.textContent) < 0) {
+                MiddleText.innerHTML = 'You look through your sack, but can`t find any potions! Enemy turn starts!';
+            } else {
+                PotionCount.textContent = Number(PotionCount.textContent) - 1;
+                console.log(Number(PlayerHealth.textContent), Math.random() * 50)
+                let temp = (Number(PlayerHealth.textContent) + Math.random() * 50).toFixed(2);
+                PlayerHealth.textContent = Math.min(100, temp);
+                MiddleText.innerHTML = `You drink a potion and regain ${temp} hp!`;
+            }
+
         };
 
         EnemyHealthBar.style.background = `linear-gradient(to left, red ${100 - Number(EnemyHealth.textContent)}%, green 1%, green)`;
@@ -428,7 +439,7 @@ buttons.forEach(e => {
 
 
         EnemyAttack();
-        MiddleText.textContent = 'Enemy Turn!';
+        
         MiddleText.style.color = 'rgba(255, 0, 0, 1)';
         MiddleText.style.display = 'inline';
         setTimeout(() => {
@@ -469,7 +480,16 @@ FrameAnswer.addEventListener('click', () => {
         }, 1200);
     } else {
         console.log("You are wrong!")
-        PlayerHealth.textContent = (Number(PlayerHealth.textContent) - Number(EnemyLevel.textContent) * Math.random() * 2).toFixed(2);
+        let temp = (Number(EnemyLevel.textContent) * Math.random() * 2).toFixed(2);
+        PlayerHealth.textContent = (Number(PlayerHealth.textContent)) - temp;
+        MiddleText.textContent = `Wrong answer! You recieve ${temp} damage! Now it's your turn!`;
+        MiddleText.style.color = 'rgba(255, 0, 0, 1)';
+        MiddleText.style.display = 'inline';
+        setTimeout(() => {
+            MiddleText.style.display = 'none';
+            MiddleText.style.color = 'rgba(255, 0, 0, 0)';
+        }, 1200);
+    
     }
 
     EnemyAttackHTML.style.display = 'none';

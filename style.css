@@ -243,7 +243,7 @@ li {
     transform: translate(0, -50%);
     z-index: 2;
     text-align: center;
-    font-size: 80px;
+    font-size: 40px;
     color: rgba(255, 0, 0, 0);
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     transition: color 1s linear;
